@@ -1,10 +1,11 @@
 import Cell from './cell';
 import DeadCell from './dead-cell';
 
+const IS_ALIVE = true;
+
 export default class AliveCell extends Cell {
   constructor() {
-    super();
-    this.isAlive = true;
+    super(IS_ALIVE);
   }
 
   evolve(numberOfAliveNeighbors) {

@@ -1,10 +1,10 @@
 import range from './utils/range';
 
 export default class State {
-  constructor(initialState, width, height) {
-    this.state = initialState;
+  constructor(width, height, initialState) {
     this.width = width;
     this.height = height;
+    this.state = initialState;
   }
 
   map(callback) {
@@ -14,28 +14,32 @@ export default class State {
       return newCell;
     }));
 
-    return new State(newState, this.width, this.height);
+    return new State(this.width, this.height, newState);
   }
 
-  getNeighbors(targetX, targetY) {
-    const neighbors = [];
-    const { minX, maxX, minY, maxY } = this.getNeighborsPositions(targetX, targetY);
+  getNeighborhood(targetX, targetY) {
+    const { minX, maxX, minY, maxY } = this.getNeighborhoodPositions(targetX, targetY);
 
-    range(minX, maxX + 1).forEach(x => range(minY, maxY + 1).forEach(y => {
-      const isTarget = x === targetX && y === targetY;
-      if(!isTarget) {
-        neighbors.push(this.state[x][y]);
-      }
-    }));
-
-    return neighbors;
+    return range(minX, maxX + 1).map(
+      x => range(minY, maxY + 1).map(
+        y => this.state[x][y]
+      )
+    )
+    .reduce(
+      (neighborhood, cellsInColumn) => [
+        ...neighborhood,
+        ...cellsInColumn
+      ],
+      []
+    );
   }
 
-  getNeighborsPositions(x, y) {
+  getNeighborhoodPositions(x, y) {
     const minX = Math.max(0, x - 1);
     const maxX = Math.min(this.width - 1, x + 1);
     const minY = Math.max(0, y - 1);
     const maxY = Math.min(this.height - 1, y + 1);
+
     return { minX, maxX, minY, maxY };
   }
 }
