@@ -1,6 +1,6 @@
 export default class Cell {
-  constructor(isAlive) {
-    this.isAlive = isAlive;
+  get isAlive () {
+    return undefined;
   }
 
   evolve() {

@@ -17,13 +17,6 @@ export default class State {
     return new State(this.width, this.height, newState);
   }
 
-  getAliveNeighbors(x, y) {
-    const neighbors = this.getNeighbors(x, y);
-    const aliveNeighbors = neighbors.filter(({ isAlive }) => isAlive);
-
-    return aliveNeighbors;
-  }
-
   getNeighbors(x, y) {
     const cell = this.state[x][y];
     const neighborhoodCells = this.getNeighborhoodCells(x, y);
