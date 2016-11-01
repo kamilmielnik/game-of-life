@@ -2,8 +2,8 @@ import Cell from './cell';
 import DeadCell from './dead-cell';
 
 export default class AliveCell extends Cell {
-  constructor(x, y) {
-    super(x, y);
+  constructor() {
+    super();
     this.isAlive = true;
   }
 
@@ -12,6 +12,6 @@ export default class AliveCell extends Cell {
       return this;
     }
 
-    return new DeadCell(this.x, this.y);
+    return new DeadCell();
   }
 }

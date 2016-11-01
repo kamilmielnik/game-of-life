@@ -1,3 +1,5 @@
+import range from './utils/range';
+
 export default class State {
   constructor(initialState, width, height) {
     this.state = initialState;
@@ -6,16 +8,11 @@ export default class State {
   }
 
   map(callback) {
-    const newState = [];
-
-    for (let x = 0; x < this.width; ++x) {
-      newState.push([]);
-      for (let y = 0; y < this.height; ++y) {
-        const cell = this.state[x][y];
-        const newCell = callback(cell, x, y);
-        newState[x].push(newCell);
-      }
-    }
+    const newState = range(0, this.width).map(x => range(0, this.height).map(y => {
+      const cell = this.state[x][y];
+      const newCell = callback(cell, x, y);
+      return newCell;
+    }));
 
     return new State(newState, this.width, this.height);
   }
@@ -24,7 +21,7 @@ export default class State {
     const neighbors = [];
     const { minX, maxX, minY, maxY } = this.getNeighborsPositions(targetX, targetY);
 
-    forEachInRange(minX, maxX, x => forEachInRange(minY, maxY, y => {
+    range(minX, maxX + 1).forEach(x => range(minY, maxY + 1).forEach(y => {
       const isTarget = x === targetX && y === targetY;
       if(!isTarget) {
         neighbors.push(this.state[x][y]);
@@ -40,11 +37,5 @@ export default class State {
     const minY = Math.max(0, y - 1);
     const maxY = Math.min(this.height - 1, y + 1);
     return { minX, maxX, minY, maxY };
-  }
-}
-
-function forEachInRange(min, max, callback) {
-  for (let i = min; i <= max; ++i) {
-    callback(i);
   }
 }
