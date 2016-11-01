@@ -17,6 +17,31 @@ export default class State {
     return new State(this.width, this.height, newState);
   }
 
+  getAliveNeighbors(x, y) {
+    const neighbors = this.getNeighbors(x, y);
+    const aliveNeighbors = neighbors.filter(({ isAlive }) => isAlive);
+
+    return aliveNeighbors;
+  }
+
+  getNeighbors(x, y) {
+    const cell = this.state[x][y];
+    const neighborhoodCells = this.getNeighborhoodCells(x, y);
+    const neighbors = neighborhoodCells.filter(neighborCandidate => neighborCandidate !== cell);
+
+    return neighbors;
+  }
+
+  getNeighborhoodCells(x, y) {
+    return this.getNeighborhood(x, y).reduce(
+      (neighborhood, cellsInColumn) => [
+        ...neighborhood,
+        ...cellsInColumn
+      ],
+      []
+    );
+  }
+
   getNeighborhood(targetX, targetY) {
     const { minX, maxX, minY, maxY } = this.getNeighborhoodPositions(targetX, targetY);
 
@@ -24,13 +49,6 @@ export default class State {
       x => range(minY, maxY + 1).map(
         y => this.state[x][y]
       )
-    )
-    .reduce(
-      (neighborhood, cellsInColumn) => [
-        ...neighborhood,
-        ...cellsInColumn
-      ],
-      []
     );
   }
 

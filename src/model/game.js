@@ -5,9 +5,7 @@ export default class Game {
 
   step() {
     this.state = this.state.map((cell, x, y) => {
-      const neighborhood = this.state.getNeighborhood(x, y);
-      const neighbors = neighborhood.filter(neighborCandidate => neighborCandidate !== cell);
-      const numberOfAliveNeighbors = neighbors.filter(({ isAlive }) => isAlive).length;
+      const numberOfAliveNeighbors = this.state.getAliveNeighbors(x, y).length;
       return cell.evolve(numberOfAliveNeighbors);
     });
   }
